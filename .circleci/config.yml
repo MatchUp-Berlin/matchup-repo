@@ -1,0 +1,33 @@
+version: 2.1
+
+jobs:
+    plan:
+        docker:
+            - image: cloudposse/geodesic:latest
+        steps:
+            - checkout
+            - run:
+                  name: terraform plan
+                  command: |
+                      terraform init -input=false
+                      terraform plan -input=false -compact-warnings -out=plan.file
+                      terraform show -json plan.file > plan.json
+            - store_artifacts:
+                  path: plan.json
+
+    deploy:
+        docker:
+            - image: cloudposse/geodesic:latest
+        steps:
+            - checkout
+            - run:
+                  name: terraform apply
+                  command: |
+                      terraform init -input=false
+                      terraform apply -input=false -compact-warnings -auto-approve
+
+workflows:
+    build:
+        jobs:
+            - plan
+            - deploy:
