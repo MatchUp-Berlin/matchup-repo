@@ -10,3 +10,16 @@ resource "aws_ecr_repository" "ecr_repo" {
       Environment = var.aws_environment
   }
 }
+
+resource "aws_ecr_repository" "ecr_repo2" {
+  name                 = var.app_name2
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+  tags = {
+      Terraform   = "true"
+      Environment = var.aws_environment
+  }
+}
