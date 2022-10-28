@@ -31,3 +31,5 @@ workflows:
         jobs:
             - plan
             - deploy:
+                  requires:
+                      - 'plan'
